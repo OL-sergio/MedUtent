@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MedUtent</string>
+    <string name="logoapp">LogoAPP</string>
+    <string name="numero_de_utente">Numero de Utente</string>
+    <string name="palavra_pass">Palavra Pass</string>
+    <string name="fa_a_aui_o_registo">Faça aui o Registo</string>
+    <string name="logo_registo">logo_Registo</string>
+    <string name="registar">Registar</string>
+    <string name="j_tenho_conta_voltar_para_login">Já tenho conta voltar para Login</string>
+    <string name="faca_aqui_o_seu_registo">Faca aqui o seu Registo</string>
+</resources>
