@@ -13,7 +13,7 @@ class ActivityIntro : AppCompatActivity() {
 
         Handler().postDelayed({
 
-            val intent = Intent(this, ActivityRegisto::class.java)
+            val intent = Intent(this, ActivityLogin::class.java)
             startActivity(intent)
         },3000)
 
