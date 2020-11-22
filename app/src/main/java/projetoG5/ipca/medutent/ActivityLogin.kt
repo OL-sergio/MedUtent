@@ -38,6 +38,7 @@ class ActivityLogin : AppCompatActivity() {
 
         auth = Firebase.auth
 
+
         buttonLogin.setOnClickListener {
             auth.signInWithEmailAndPassword(editTextName.text.toString(), editTextPassword.text.toString())
                     .addOnCompleteListener(this) { task ->
@@ -94,6 +95,12 @@ class ActivityLogin : AppCompatActivity() {
         buttonLoginGoolge.setOnClickListener {
             signIn()
         }
+
+        textViewRegister.setOnClickListener {
+            val intent = Intent(this, ActivityRegisto::class.java)
+            startActivity(intent)
+        }
+
     }
 
 

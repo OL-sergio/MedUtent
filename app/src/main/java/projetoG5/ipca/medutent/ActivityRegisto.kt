@@ -29,8 +29,8 @@ class ActivityRegisto : AppCompatActivity(){
 
         buttonRegistarUtilizador.setOnClickListener {
             auth.createUserWithEmailAndPassword(
-                textViewRegistarIDUtilizador.text.toString(),
-                textViewRegistarPassword.text.toString())
+                editTextNameRegisto.text.toString(),
+                editTextPasswordRegisto.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
@@ -53,8 +53,6 @@ class ActivityRegisto : AppCompatActivity(){
 
             val intent = Intent (this,  ActivityLogin::class.java  )
             startActivity(intent)
-
-
         }
 
     }
