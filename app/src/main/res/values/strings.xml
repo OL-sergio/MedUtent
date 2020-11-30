@@ -8,4 +8,5 @@
     <string name="registar">Registar</string>
     <string name="j_tenho_conta_voltar_para_login">Já tenho conta voltar para Login</string>
     <string name="faca_aqui_o_seu_registo">Faca aqui o seu Registo</string>
+    <string name="passwordLevel" />
 </resources>
