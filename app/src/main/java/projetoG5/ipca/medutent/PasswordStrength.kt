@@ -2,14 +2,16 @@ package projetoG5.ipca.medutent
 
 import android.graphics.Color
 
+
+
 enum class PasswordStrength
 
 constructor(var resId: Int, color: Int) {
 
     FRACA(R.string.passwordLevel, Color.RED),
     MEDIA(R.string.passwordLevel, Color.YELLOW),
-    FORTE(R.string.passwordLevel, Color.GREEN),
-    MUITO_FORTE(R.string.passwordLevel, Color.BLUE);
+    FORTE(R.string.passwordLevel, Color.GREEN);
+
 
     var color: Int = 0
         internal set
@@ -18,16 +20,13 @@ constructor(var resId: Int, color: Int) {
         this.color = color
     }
 
-    fun getText(ctx: android.content.Context): CharSequence {
+    fun getText(ctx: MainActivity): CharSequence {
         return ctx.getText(resId)
     }
-
     companion object {
 
 
         var REQUIRED_LENGTH = 8
-
-        var MAXIMUM_LENGTH = 15
 
         var REQUIRE_SPECIAL_CHARACTERS = true
 
@@ -77,9 +76,6 @@ constructor(var resId: Int, color: Int) {
                     currentScore = 1
                 } else {
                     currentScore = 2
-                    if (password.length > MAXIMUM_LENGTH) {
-                        currentScore = 3
-                    }
                 }
             } else {
                 currentScore = 0
@@ -89,10 +85,9 @@ constructor(var resId: Int, color: Int) {
                 0 -> return FRACA
                 1 -> return MEDIA
                 2 -> return FORTE
-                3 -> return MUITO_FORTE
             }
 
-            return MUITO_FORTE
+            return FORTE
         }
     }
 

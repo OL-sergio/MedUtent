@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.widget.EditText
 import android.widget.TextView
 
+
 class MainActivity : AppCompatActivity(), TextWatcher {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
 
         } else if (str.getText(this) == "Forte") {
 
-        } else { (str.getText( this) == "Muito Forte")
+        } else {
 
         }
     }
