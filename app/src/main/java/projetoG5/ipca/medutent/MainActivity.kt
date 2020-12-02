@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.TextView
 
 class MainActivity : AppCompatActivity(), TextWatcher {
@@ -30,9 +29,8 @@ class MainActivity : AppCompatActivity(), TextWatcher {
 
     private fun updatePasswordStrengthView(password: String) {
 
-        val strengthView = findViewById<ProgressBar>(R.id.passwordLevel) as TextView
-        if (TextView.VISIBLE != strengthView.visibility)
-            return
+        val strengthView = findViewById<TextView>(R.id.passwordLevel)
+
 
         if (TextUtils.isEmpty(password)) {
             strengthView.text = ""
