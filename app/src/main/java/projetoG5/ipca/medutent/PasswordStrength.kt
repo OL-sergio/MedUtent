@@ -1,15 +1,15 @@
 package projetoG5.ipca.medutent
 
-import android.graphics.Color;
+import android.graphics.Color
 
 enum class PasswordStrength
 
 constructor(var resId: Int, color: Int) {
 
-    WEAK(R.string.passwordLevel, Color.RED),
-    MEDIUM(R.string.passwordLevel, Color.YELLOW),
-    STRONG(R.string.passwordLevel, Color.GREEN),
-    VERY_STRONG(R.string.passwordLevel, Color.BLUE);
+    FRACA(R.string.passwordLevel, Color.RED),
+    MEDIA(R.string.passwordLevel, Color.YELLOW),
+    FORTE(R.string.passwordLevel, Color.GREEN),
+    MUITO_FORTE(R.string.passwordLevel, Color.BLUE);
 
     var color: Int = 0
         internal set
@@ -86,13 +86,13 @@ constructor(var resId: Int, color: Int) {
             }
 
             when (currentScore) {
-                0 -> return WEAK
-                1 -> return MEDIUM
-                2 -> return STRONG
-                3 -> return VERY_STRONG
+                0 -> return FRACA
+                1 -> return MEDIA
+                2 -> return FORTE
+                3 -> return MUITO_FORTE
             }
 
-            return VERY_STRONG
+            return MUITO_FORTE
         }
     }
 

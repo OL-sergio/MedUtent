@@ -44,13 +44,13 @@ class MainActivity : AppCompatActivity(), TextWatcher {
         strengthView.setTextColor(str.color)
 
 
-        if (str.getText(this) == "Weak") {
+        if (str.getText(this) == "Fraca") {
 
-        } else if (str.getText(this) == "Medium") {
+        } else if (str.getText(this) == "Média") {
 
-        } else if (str.getText(this) == "Strong") {
+        } else if (str.getText(this) == "Forte") {
 
-        } else {
+        } else { (str.getText( this) == "Muito Forte")
 
         }
     }
