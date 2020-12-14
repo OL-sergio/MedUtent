@@ -11,13 +11,15 @@
         android:id="@+id/PasswordRegistoConfirm"
         android:layout_width="350dp"
         android:layout_height="50dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="confirmar password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLevel" />
+        app:layout_constraintTop_toBottomOf="@+id/PasswordRegisto"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -81,25 +83,25 @@
 
     <EditText
         android:id="@+id/PasswordRegisto"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="345dp"
+        android:layout_height="48dp"
         android:layout_marginTop="12dp"
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.475"
+        app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/EmailRegisto" />
 
     <TextView
-        android:id="@+id/passwordLevel"
+        android:id="@+id/strength_level_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.092"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PasswordRegisto" />
+        app:layout_constraintBottom_toBottomOf="@+id/PasswordRegisto"
+        app:layout_constraintEnd_toEndOf="@+id/PasswordRegisto"
+        app:layout_constraintTop_toTopOf="@+id/PasswordRegisto"
+        tools:ignore="MissingConstraints" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
