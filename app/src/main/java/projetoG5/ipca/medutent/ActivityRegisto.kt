@@ -86,7 +86,7 @@ class ActivityRegisto : AppCompatActivity(){
     }
 
     private fun displayStrenghtLevel(strenghtLevel: String) {
-        buttonRegistarUtilizador.isEnabled = strenghtLevel.contains("Muito Forte")
+        buttonRegistarUtilizador.isEnabled = strenghtLevel.contains("Forte")
 
         strength_level_txt.text = strenghtLevel
         strength_level_txt.setTextColor(ContextCompat.getColor(this, color))

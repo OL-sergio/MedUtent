@@ -9,8 +9,8 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="weak">#FF4646</color>
-    <color name="medium">#ff8f00</color>
-    <color name="strong">#FCCA3F</color>
-    <color name="veryStrong">#00c853</color>
+    <color name="medium">#ebdf34</color>
+    <color name="strong">#53eb34</color>
+    <color name="veryStrong">#34a1eb</color>
 
 </resources>

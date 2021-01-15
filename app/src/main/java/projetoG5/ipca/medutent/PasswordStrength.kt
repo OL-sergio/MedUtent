@@ -31,7 +31,7 @@ class PasswordStrength : TextWatcher {
     }
 
     private fun calculateStrenght(password: CharSequence) {
-        if(password.length in 0..7){
+        if(password.length in 0..8){
             strengthColor.value = R.color.weak
             strengthLevel.value = "Fraca"
         }else if(password.length in 8..10){
@@ -39,13 +39,13 @@ class PasswordStrength : TextWatcher {
                 strengthColor.value = R.color.medium
                 strengthLevel.value = "Média"
             }
-        }else if (password.length in 11..16){
+        }else if (password.length in 11..13){
             if (lowerCase.value == 1 || upperCase.value == 1 || digit.value == 1 || specialChar.value == 1){
                if(lowerCase.value == 1 && upperCase.value == 1){
                    strengthColor.value = R.color.strong
                    strengthLevel.value = "Forte"
                }
-            }else if(password.length > 16){
+            }else if(password.length >= 13){
                 if (lowerCase.value == 1 && upperCase.value == 1 && digit.value == 1 && specialChar.value == 1){
                     strengthColor.value = R.color.veryStrong
                     strengthLevel.value = "Muito Forte"
