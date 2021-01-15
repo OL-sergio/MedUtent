@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "927792411315",
+    "firebase_url": "https://medutente.firebaseio.com",
+    "project_id": "medutente",
+    "storage_bucket": "medutente.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927792411315:android:4e5b65ef9f16f8ccf0f6c6",
+        "android_client_info": {
+          "package_name": "ipca.example.medutente"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927792411315-6fjvfuq2uaimkk4sn3dci6231lrtd3s0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ipca.example.medutente",
+            "certificate_hash": "5ebf3c0a64d6370f8d8df478e9860962902e57d4"
+          }
+        },
+        {
+          "client_id": "927792411315-mgd8m3q648tlnhv07fag4kitieifq76a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXYOKluakF2OMNwnePKAK4Xa3hRFjI_zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927792411315-mgd8m3q648tlnhv07fag4kitieifq76a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927792411315:android:fe1134d577938b5bf0f6c6",
+        "android_client_info": {
+          "package_name": "projetoG5.ipca.medutent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927792411315-mgd8m3q648tlnhv07fag4kitieifq76a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXYOKluakF2OMNwnePKAK4Xa3hRFjI_zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927792411315-mgd8m3q648tlnhv07fag4kitieifq76a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

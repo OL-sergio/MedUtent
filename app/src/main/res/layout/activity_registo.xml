@@ -3,38 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textViewRegistarIDUtilizador"
-        android:layout_width="250dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="92dp"
-        android:hint="@string/numero_de_utente"
+    <EditText
+        android:id="@+id/PasswordRegistoConfirm"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:hint="confirmar password"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-    <TextView
-        android:id="@+id/textViewRegistarPassword"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="20dp"
-        android:hint="@string/palavra_pass"
-        app:layout_constraintEnd_toEndOf="@+id/textViewRegistarIDUtilizador"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textViewRegistarIDUtilizador"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRegistarIDUtilizador" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordLevel" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="130dp"
         android:layout_height="127dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="4dp"
         android:contentDescription="@string/logo_registo"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.462"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_da_app" />
@@ -43,26 +35,23 @@
         android:id="@+id/buttonRegistarUtilizador"
         android:layout_width="150dp"
         android:layout_height="45dp"
+        android:layout_marginBottom="44dp"
         android:text="@string/registar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/textViewRegistarPassword"
-        app:layout_constraintHorizontal_bias="0.423"
-        app:layout_constraintStart_toStartOf="@+id/textViewRegistarPassword"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRegistarPassword"
-        app:layout_constraintVertical_bias="0.137" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.459"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textViewTextoRegisto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="4dp"
         android:text="@string/faca_aqui_o_seu_registo"
-        app:layout_constraintBottom_toTopOf="@+id/textViewRegistarIDUtilizador"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.304"
+        app:layout_constraintHorizontal_bias="0.456"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.08" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
         android:id="@+id/textViewRegistarReturnLogin"
@@ -72,8 +61,45 @@
         android:text="@string/j_tenho_conta_voltar_para_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.31"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonRegistarUtilizador"
-        app:layout_constraintVertical_bias="0.546" />
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/EmailRegisto"
+        android:layout_width="348dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTextoRegisto" />
+
+    <EditText
+        android:id="@+id/PasswordRegisto"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.475"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/EmailRegisto" />
+
+    <TextView
+        android:id="@+id/passwordLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.092"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PasswordRegisto" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
