@@ -1,7 +1,5 @@
 package projetoG5.ipca.medutent
 
-import android.graphics.Color
-import android.icu.util.IslamicCalendar
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.lifecycle.MutableLiveData
