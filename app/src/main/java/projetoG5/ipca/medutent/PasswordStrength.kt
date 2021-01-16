@@ -74,8 +74,5 @@ class PasswordStrength : TextWatcher {
         val hasSpecialChar: Matcher = pattern.matcher(this)
         return hasSpecialChar.find()
     }
-
-
-
 }
 
