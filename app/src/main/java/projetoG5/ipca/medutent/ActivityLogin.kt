@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package projetoG5.ipca.medutent
 
 import android.content.Intent
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 
+@Suppress("DEPRECATION")
 class ActivityLogin : AppCompatActivity() {
 
 

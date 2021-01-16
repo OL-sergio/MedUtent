@@ -13,4 +13,9 @@
     <color name="strong">#53eb34</color>
     <color name="veryStrong">#34a1eb</color>
 
+    <color name="colorPrimary">#393A41</color>
+    <color name="colorPrimaryDark">#1C223C</color>
+    <color name="colorAccent">#1C223C</color>
+    <color name="colorProfile">#1C223C</color>
+
 </resources>

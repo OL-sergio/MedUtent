@@ -7,6 +7,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.MessengerApp.AppBarOverlay"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/Theme.MessengerApp.AppBarOverlay"
+            >
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <EditText
+        android:id="@+id/editText_username_register"
+        android:layout_width="349dp"
+        android:layout_height="49dp"
+        android:hint="@string/Utilizador"
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/EmailRegisto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.419"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTextoRegisto"
+        app:layout_constraintVertical_bias="0.535" />
+
     <EditText
         android:id="@+id/PasswordRegistoConfirm"
         android:layout_width="350dp"
@@ -25,7 +57,7 @@
         android:id="@+id/imageView2"
         android:layout_width="130dp"
         android:layout_height="127dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="164dp"
         android:contentDescription="@string/logo_registo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.462"
@@ -72,14 +104,13 @@
         android:id="@+id/EmailRegisto"
         android:layout_width="348dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTextoRegisto" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_username_register" />
 
     <EditText
         android:id="@+id/PasswordRegisto"
