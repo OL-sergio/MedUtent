@@ -1,0 +1,817 @@
+Index: app/src/main/java/projetoG5/ipca/medutent/ActivityFragmentAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/ActivityFragmentAdapter.kt	(date 1610909025851)
++++ app/src/main/java/projetoG5/ipca/medutent/ActivityFragmentAdapter.kt	(date 1610909025851)
+@@ -0,0 +1,142 @@
++package projetoG5.ipca.medutent
++
++import android.content.Intent
++import android.os.Bundle
++import android.view.Menu
++import android.view.MenuItem
++import androidx.appcompat.app.AppCompatActivity
++import androidx.appcompat.widget.Toolbar
++import androidx.fragment.app.Fragment
++import androidx.fragment.app.FragmentManager
++import androidx.fragment.app.FragmentPagerAdapter
++import androidx.viewpager.widget.ViewPager
++import com.google.android.material.tabs.TabLayout
++import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.auth.FirebaseUser
++import com.google.firebase.database.*
++import com.squareup.picasso.Picasso
++import kotlinx.android.synthetic.main.activity_main_view_pager.*
++import projetoG5.ipca.medutent.Fragments.ChatFragment
++import projetoG5.ipca.medutent.Fragments.SearchFragment
++import projetoG5.ipca.medutent.Fragments.SettingsFragment
++import projetoG5.ipca.medutent.ModelClasses.Users
++
++@Suppress("DEPRECATION")
++class ActivityFragmentAdapter : AppCompatActivity() {
++
++
++    var refUsers : DatabaseReference? = null
++    var firebaseUser : FirebaseUser? = null
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_main_view_pager)
++
++        firebaseUser = FirebaseAuth.getInstance().currentUser
++        refUsers = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUser!!.uid)
++
++        val toolbar : Toolbar = findViewById(R.id.toolbar_main)
++        setSupportActionBar(toolbar)
++        supportActionBar!!.title = ""
++
++
++
++        val tabLayout: TabLayout = findViewById(R.id.tab_layout)
++        val viewPager: ViewPager = findViewById(R.id.view_pager)
++        val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
++
++        viewPagerAdapter.addFragment( ChatFragment(), "Chats")
++        viewPagerAdapter.addFragment( SearchFragment(), "Search")
++        viewPagerAdapter.addFragment( SettingsFragment(), "Settings")
++
++        viewPager.adapter = viewPagerAdapter
++        tabLayout.setupWithViewPager(viewPager)
++
++
++        //Display user name and photo
++        refUsers!!.addValueEventListener(object : ValueEventListener {
++            override fun onDataChange ( p0: DataSnapshot){
++                if (p0.exists()){
++                    val user: Users? = p0.getValue(Users::class.java)
++
++                    user_name.text = user!!.getUserName()
++                    Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(profile_image)
++                }
++
++            }
++
++            override fun onCancelled(error: DatabaseError) {
++
++
++            }
++
++
++        })
++
++    }
++
++
++
++    override fun onCreateOptionsMenu(menu: Menu): Boolean {
++        // Inflate the menu; this adds items to the action bar if it is present.
++        menuInflater.inflate(R.menu.menu_main, menu)
++        return true
++    }
++
++    override fun onOptionsItemSelected(item: MenuItem): Boolean {
++        // Handle action bar item clicks here. The action bar will
++        // automatically handle clicks on the Home/Up button, so long
++        // as you specify a parent activity in AndroidManifest.xml.
++        when (item.itemId) {
++
++            R.id.action_logout -> {
++
++                FirebaseAuth.getInstance().signOut()
++
++                val intent = Intent(this@ActivityFragmentAdapter, ActivityLogin::class.java)
++                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
++                startActivity(intent)
++                finish()
++
++                return true
++            }
++        }
++        return false
++    }
++
++
++
++
++    internal  class ViewPagerAdapter (fragmentManager: FragmentManager)
++        : FragmentPagerAdapter(fragmentManager){
++
++        private val fragments : ArrayList<Fragment>
++        private val titles : ArrayList<String>
++
++        init {
++            fragments = ArrayList<Fragment>()
++            titles = ArrayList<String>()
++        }
++
++        override fun getCount(): Int {
++            return fragments.size
++        }
++
++        override fun getItem(position: Int): Fragment {
++            return fragments[position]
++        }
++
++        fun addFragment(fragment: Fragment, title: String){
++
++            fragments.add(fragment)
++            titles.add(title)
++        }
++
++        override fun getPageTitle(i: Int): CharSequence {
++
++            return titles[i]
++        }
++
++    }
++
++}
+\ No newline at end of file
+Index: app/src/main/java/projetoG5/ipca/medutent/AdapterClasses/ChatAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/AdapterClasses/ChatAdapter.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/AdapterClasses/ChatAdapter.kt	(date 1610909025834)
+@@ -1,4 +1,145 @@
+ package projetoG5.ipca.medutent.AdapterClasses
+ 
+-class ChatAdapter {
++import android.annotation.SuppressLint
++import android.content.Context
++import android.view.LayoutInflater
++import android.view.View
++import android.view.ViewGroup
++import android.widget.ImageView
++import android.widget.RelativeLayout
++import android.widget.TextView
++import androidx.recyclerview.widget.RecyclerView
++import com.google.firebase.auth.FirebaseAuth
++import com.google.firebase.auth.FirebaseUser
++import com.squareup.picasso.Picasso
++import de.hdodenhof.circleimageview.CircleImageView
++import projetoG5.ipca.medutent.ModelClasses.Chat
++import projetoG5.ipca.medutent.R
++
++class ChatAdapter (mContext: Context, mChatList: List<Chat>, imageUrl: String):
++    RecyclerView.Adapter<ChatAdapter.ViewHolder?>() {
++
++
++
++    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
++        var profile_image: CircleImageView? = null
++        var show_text_message : TextView? = null
++        var left_image_view : ImageView? = null
++        var right_image_view : ImageView? = null
++        var text_seen : TextView? = null
++
++        init {
++            profile_image = itemView.findViewById(R.id.profile_image)
++            show_text_message = itemView.findViewById(R.id.show_text_message)
++            left_image_view = itemView.findViewById(R.id.left_image_view)
++            right_image_view = itemView.findViewById(R.id.right_image_view)
++            text_seen = itemView.findViewById(R.id.text_seen)
++        }
++    }
++
++    private val mContext : Context?
++    private val mChatList : List<Chat>
++    private val imageUrl : String
++    val firebaseUser : FirebaseUser = FirebaseAuth.getInstance().currentUser!!
++
++
++    init {
++        this.mChatList = mChatList
++        this.mContext = mContext
++        this.imageUrl = imageUrl
++    }
++
++    override fun getItemViewType(position: Int): Int {
++
++        return if (mChatList[position].getSender().equals(firebaseUser.uid))
++        {
++            1
++
++        }
++        else{
++
++            0
++        }
++    }
++
++    override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
++        return if (position == 1){
++            val view: View = LayoutInflater.from(mContext)
++                .inflate(R.layout.message_item_right, parent, false)
++            ViewHolder(view)
++        }
++        else{
++            val view: View = LayoutInflater.from(mContext)
++                .inflate(R.layout.message_item_left, parent, false)
++            ViewHolder(view)
++        }
++    }
++    override fun getItemCount(): Int {
++        return mChatList.size
++    }
++
++
++    @SuppressLint("SetTextI18n")
++    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
++
++        val chat : Chat = mChatList [position]
++
++        Picasso.get().load(imageUrl).into(holder.profile_image)
++
++        if (chat.getMessage().equals("Sent you an image.") && chat.getUrl().equals("")){
++
++            // image message - right side
++            if (chat.getSender().equals(firebaseUser.uid)){
++                holder.show_text_message!!.visibility = View.GONE
++                holder.right_image_view!!.visibility = View.VISIBLE
++                Picasso.get().load(chat.getUrl()).into(holder.right_image_view)
++                // image message - left side
++            }else if (!chat.getSender().equals(firebaseUser.uid)) {
++                holder.show_text_message!!.visibility = View.GONE
++                holder.left_image_view!!.visibility = View.VISIBLE
++                Picasso.get().load(chat.getUrl()).into(holder.left_image_view)
++            }
++        }
++        // text Messages
++        else {
++            holder.show_text_message!!.text = chat.getMessage()
++        }
++
++        //sent and seen message
++        if (position == mChatList.size - 1){
++            if (chat.getIsseen()){
++
++                holder.text_seen!!.text ="Seen"
++
++                if (chat.getMessage().equals("Sent you an image.") && chat.getUrl().equals("")){
++                    val lp : RelativeLayout.LayoutParams? = holder.text_seen!!
++                        .layoutParams as RelativeLayout.LayoutParams?
++                    lp!!.setMargins(0,245,10,0)
++                    holder.text_seen!!.layoutParams = lp
++                }
++            }
++            else {
++
++                holder.text_seen!!.text ="Sent"
++
++                if (chat.getMessage().equals("Sent you an image.") && chat.getUrl().equals("")){
++                    val lp : RelativeLayout.LayoutParams? = holder.text_seen!!
++                        .layoutParams as RelativeLayout.LayoutParams?
++                    lp!!.setMargins(0,245,10,0)
++                    holder.text_seen!!.layoutParams = lp
++                }
++
++            }
++        }
++        else{
++            holder.text_seen!!.visibility = View.GONE
++        }
++
++    }
++
++
++
++
++
++
+ }
+\ No newline at end of file
+Index: app/src/main/res/menu/menu_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/menu_main.xml	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/res/menu/menu_main.xml	(date 1610907034074)
+@@ -3,7 +3,7 @@
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+-    tools:context="projetoG5.ipca.MainActivity">
++    tools:context=".ipcasergio.am2.messengerapp.AdapterClasses.ActivityFragmentAdapter">
+     <item
+         android:id="@+id/action_logout"
+         android:orderInCategory="100"
+Index: app/src/main/java/projetoG5/ipca/medutent/Fragments/SettingsFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/Fragments/SettingsFragment.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/Fragments/SettingsFragment.kt	(date 1610908856173)
+@@ -1,4 +1,6 @@
+ package projetoG5.ipca.medutent.Fragments
+ 
+-class SettingsFragment {
++import androidx.fragment.app.Fragment
++
++class SettingsFragment : Fragment() {
+ }
+\ No newline at end of file
+Index: app/src/main/java/projetoG5/ipca/medutent/Fragments/SearchFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/Fragments/SearchFragment.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/Fragments/SearchFragment.kt	(date 1610908856165)
+@@ -1,4 +1,6 @@
+ package projetoG5.ipca.medutent.Fragments
+ 
+-class SearchFragment {
++import androidx.fragment.app.Fragment
++
++class SearchFragment :  Fragment()  {
+ }
+\ No newline at end of file
+Index: app/src/main/java/projetoG5/ipca/medutent/ActivityRegisto.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/ActivityRegisto.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/ActivityRegisto.kt	(date 1610907805552)
+@@ -2,23 +2,17 @@
+ 
+ import android.content.Intent
+ import android.os.Bundle
+-import android.provider.ContactsContract
+-import android.text.TextUtils
+-import android.util.Log
+ import android.widget.Button
+ import android.widget.EditText
+ import android.widget.Toast
+ import androidx.appcompat.app.AppCompatActivity
+ import androidx.core.content.ContextCompat
+-import androidx.core.widget.addTextChangedListener
+ import androidx.lifecycle.Observer
+-import com.google.common.collect.Iterables.isEmpty
+-
+ import com.google.firebase.auth.FirebaseAuth
+-import com.google.firebase.auth.ktx.auth
+-import com.google.firebase.ktx.Firebase
+-import kotlinx.android.synthetic.main.activity_login.*
++import com.google.firebase.database.DatabaseReference
++import com.google.firebase.database.FirebaseDatabase
+ import kotlinx.android.synthetic.main.activity_registo.*
++import kotlinx.android.synthetic.main.user_search_item_layout.*
+ 
+ class ActivityRegisto : AppCompatActivity(){
+ 
+@@ -27,6 +21,12 @@
+     private var color: Int= R.color.weak
+ 
+ 
++    private lateinit var  mAuth: FirebaseAuth
++    private lateinit var  refUsers : DatabaseReference
++    private var firebaseUserID: String = ""
++
++
++
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_registo)
+@@ -66,7 +66,27 @@
+ 
+             else
+             {
++
++
++
++
+                 auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
++                        .addOnCompleteListener { task ->
++                            if (task.isSuccessful){
++
++                firebaseUserID = mAuth.currentUser!!.uid
++                refUsers = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUserID)
++
++                val userHashMap = HashMap<String, Any>()
++                userHashMap["uid"] = firebaseUserID
++                userHashMap["username"] = username
++                userHashMap["profile"] = "https://firebasestorage.googleapis.com/v0/b/messegerapp-d957e.appspot.com/o/profile-icons-user.jpeg?alt=media&token=428006b0-d8c8-4295-aa67-4a955146b2c5"
++                userHashMap["cover"]   = "https://firebasestorage.googleapis.com/v0/b/messegerapp-d957e.appspot.com/o/profile-imag.jfif?alt=media&token=f7a52a32-8169-4061-b0f5-d3f4552fb5cc"
++                userHashMap["status"] = "offline"
++                userHashMap["search"] = username //.toLowerCase() a resolver
++
++
++                refUsers.updateChildren(userHashMap)
+                         .addOnCompleteListener(this) { task ->
+                             if (task.isSuccessful) {
+                                 // Sign in success, update UI with the signed-in user's information
+@@ -78,6 +98,11 @@
+                                 Toast.makeText(baseContext, "register failed.", Toast.LENGTH_SHORT).show()
+ 
+                             }
++
++                        }
++
++                            }
++
+                         }
+ 
+             }
+Index: app/src/main/java/projetoG5/ipca/medutent/Fragments/ChatFragment.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/Fragments/ChatFragment.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/Fragments/ChatFragment.kt	(date 1610908856122)
+@@ -1,4 +1,6 @@
+ package projetoG5.ipca.medutent.Fragments
+ 
+-class ChatFragment {
++import androidx.fragment.app.Fragment
++
++class ChatFragment : Fragment () {
+ }
+\ No newline at end of file
+Index: app/src/main/java/projetoG5/ipca/medutent/AdapterClasses/UserAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/AdapterClasses/UserAdapter.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/AdapterClasses/UserAdapter.kt	(date 1610909025842)
+@@ -1,4 +1,102 @@
+ package projetoG5.ipca.medutent.AdapterClasses
+ 
+-class UserAdapter {
++import android.app.AlertDialog
++import android.content.Context
++import android.content.DialogInterface
++import android.content.Intent
++import android.view.LayoutInflater
++import android.view.View
++import android.view.ViewGroup
++import android.widget.TextView
++import androidx.recyclerview.widget.RecyclerView
++import com.squareup.picasso.Picasso
++import de.hdodenhof.circleimageview.CircleImageView
++import projetoG5.ipca.medutent.ChatActivity
++import projetoG5.ipca.medutent.ModelClasses.Users
++import projetoG5.ipca.medutent.R
++
++class UserAdapter (mContext: Context, mUsers: List<Users>, isChatCheck : Boolean) :
++    RecyclerView.Adapter<UserAdapter.ViewHolder?>() {
++
++    override fun getItemCount(): Int {
++        return mUsers.size
++    }
++
++    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
++        var userNametTxt : TextView
++        var profileImageView : CircleImageView
++        var onlineImageView: CircleImageView
++        var offlineImageView : CircleImageView
++        var lastMessageTxt : TextView
++
++        init {
++            userNametTxt = itemView.findViewById(R.id.username)
++            profileImageView = itemView.findViewById(R.id.profile_image)
++            onlineImageView = itemView.findViewById(R.id.image_online)
++            offlineImageView = itemView.findViewById(R.id.image_offline)
++            lastMessageTxt = itemView.findViewById(R.id.message_last)
++
++
++        }
++    }
++
++    private  val mContext : Context
++    private  val mUsers : List<Users>
++    private  val isChatCheck : Boolean
++
++    init {
++        this.mUsers = mUsers
++        this.mContext = mContext
++        this.isChatCheck = isChatCheck
++    }
++
++    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
++
++        val view: View = LayoutInflater.from(mContext)
++            .inflate(R.layout.user_search_item_layout, viewGroup, false)
++        return UserAdapter.ViewHolder(view)
++    }
++
++    override fun onBindViewHolder(holder: ViewHolder, i: Int) {
++
++        val user: Users = mUsers[i]
++        holder.userNametTxt.text = user.getUserName()
++        Picasso.get().load(user.getProfile()).placeholder(R.drawable.profile_img).into(holder.profileImageView)
++
++        //chat
++        holder.itemView.setOnClickListener {
++            val options = arrayOf<CharSequence>(
++                "Send Message",
++                "Visit Profile"
++            )
++            val builder = AlertDialog.Builder(mContext)
++            builder.setTitle("What do you want?")
++            builder.setItems(options, DialogInterface.OnClickListener { dialog, position ->
++                if (position == 0 ){
++
++                    val intent = Intent(mContext, ChatActivity::class.java)
++                    intent.putExtra("visit_id", user.getUID())
++                    // modei aqui arrayof
++                    mContext.startActivities(arrayOf(intent))
++
++
++                }
++                if (position == 1 ){
++
++
++
++                }
++
++
++            })
++            builder.show()
++        }
++
++    }
++
++
++
++
++
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/projetoG5/ipca/medutent/ModelClasses/Users.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/ModelClasses/Users.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/ModelClasses/Users.kt	(date 1610908856129)
+@@ -1,4 +1,112 @@
+ package projetoG5.ipca.medutent.ModelClasses
+ 
+ class Users {
++
++    private var uid : String = ""
++    private var username : String = ""
++    private var profile : String = ""
++    private var cover : String = ""
++    private var search : String = ""
++    private var status : String = ""
++    private var facebook : String = ""
++    private var instagram : String = ""
++    private var website : String = ""
++
++
++    constructor()
++
++
++    constructor(
++            uid: String,
++            username: String,
++            profile: String,
++            cover: String,
++            search: String,
++            status: String,
++            facebook: String,
++            instagram: String,
++            website: String
++    ) {
++        this.uid = uid
++        this.username = username
++        this.profile = profile
++        this.cover = cover
++        this.search = search
++        this.status = status
++        this.facebook = facebook
++        this.instagram = instagram
++        this.website = website
++    }
++
++    fun getUID(): String {
++        return uid
++    }
++
++    fun  setUID(uid: String){
++        this.uid = uid
++    }
++
++    fun getUserName(): String {
++        return username
++    }
++
++    fun  setUserName(username: String){
++        this.username = username
++    }
++
++    fun getProfile(): String {
++        return profile
++    }
++
++    fun  setProfile(profile: String){
++        this.profile = profile
++    }
++
++    fun getCover(): String {
++        return cover
++    }
++
++    fun  setCover(cover: String){
++        this.cover = cover
++    }
++
++    fun getSearch(): String {
++        return search
++    }
++
++    fun  setSearch(search: String){
++        this.search = search
++    }
++
++    fun getStatus(): String {
++        return status
++    }
++
++    fun  setStatus(status: String){
++        this.status = status
++    }
++
++    fun getFacebook(): String {
++        return facebook
++    }
++
++    fun  setFacebook(facebook: String){
++        this.facebook = facebook
++    }
++
++    fun getInstagram(): String {
++        return instagram
++    }
++
++    fun  setInstagram(instagram: String){
++        this.instagram = instagram
++    }
++
++    fun getWebsite(): String {
++        return website
++    }
++
++    fun  setWebsite(website: String){
++        this.website = website
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main_view_pager.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main_view_pager.xml	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/res/layout/activity_main_view_pager.xml	(date 1610908856142)
+@@ -6,7 +6,7 @@
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     android:orientation="vertical"
+-    tools:context=".MainActivity">
++    tools:context="ActivityFragmentAdapter">
+ 
+     <com.google.android.material.appbar.AppBarLayout
+         android:layout_width="match_parent"
+Index: app/src/main/java/projetoG5/ipca/medutent/ModelClasses/ChatList.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/ModelClasses/ChatList.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/ModelClasses/ChatList.kt	(date 1610908856158)
+@@ -1,4 +1,21 @@
+ package projetoG5.ipca.medutent.ModelClasses
+ 
+ class ChatList {
++
++    private var id : String = ""
++
++    constructor()
++
++
++    constructor(id: String) {
++        this.id = id
++    }
++
++    fun getId(): String {
++        return  id
++    }
++    fun setId(id: String?){
++        this.id = id!!
++    }
++
+ }
+\ No newline at end of file
+Index: app/src/main/java/projetoG5/ipca/medutent/ModelClasses/Chat.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/projetoG5/ipca/medutent/ModelClasses/Chat.kt	(revision 2a4d61354667dcf480f6636e2133b1f53c7bbda6)
++++ app/src/main/java/projetoG5/ipca/medutent/ModelClasses/Chat.kt	(date 1610908856136)
+@@ -1,4 +1,72 @@
+ package projetoG5.ipca.medutent.ModelClasses
+ 
++
+ class Chat {
++    private  var sender : String = ""
++    private  var message : String = ""
++    private  var receiver : String = ""
++    private  var isseen = false
++    private  var url : String = ""
++    private  var messageID : String = ""
++
++    constructor()
++
++
++    constructor(
++            sender: String,
++            message: String,
++            receiver: String,
++            isseen: Boolean,
++            url: String,
++            messageID: String
++    ) {
++        this.sender = sender
++        this.message = message
++        this.receiver = receiver
++        this.isseen = isseen
++        this.url = url
++        this.messageID = messageID
++    }
++
++    fun getSender(): String {
++        return  sender
++    }
++    fun setSender(sender: String?){
++        this.sender = sender!!
++    }
++
++    fun getMessage(): String {
++        return  message
++    }
++    fun setMessage(message: String?){
++        this.message = message!!
++    }
++
++    fun getReceiver(): String {
++        return  receiver
++    }
++    fun setReceiver(receiver: String?){
++        this.receiver = receiver!!
++    }
++
++    fun getIsseen(): Boolean{
++        return  isseen
++    }
++    fun setIsseen(isseen: Boolean){
++        this.isseen = isseen
++    }
++
++    fun getUrl(): String {
++        return  url
++    }
++    fun setUrl(url: String?){
++        this.url = url!!
++    }
++
++    fun getMessageID(): String {
++        return  messageID
++    }
++    fun setMessageID(messageID: String?){
++        this.messageID = messageID!!
++    }
+ }
+\ No newline at end of file

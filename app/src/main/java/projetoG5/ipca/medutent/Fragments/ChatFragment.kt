@@ -1,4 +1,6 @@
 package projetoG5.ipca.medutent.Fragments
 
-class ChatFragment {
+import androidx.fragment.app.Fragment
+
+class ChatFragment : Fragment () {
 }

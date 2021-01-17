@@ -1,4 +1,6 @@
 package projetoG5.ipca.medutent.Fragments
 
-class SearchFragment {
+import androidx.fragment.app.Fragment
+
+class SearchFragment :  Fragment()  {
 }

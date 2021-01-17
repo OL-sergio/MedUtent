@@ -2,29 +2,29 @@ package projetoG5.ipca.medutent
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.text.TextUtils
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
-import com.google.common.collect.Iterables.isEmpty
-
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.activity_login.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_registo.*
+import kotlinx.android.synthetic.main.user_search_item_layout.*
 
 class ActivityRegisto : AppCompatActivity(){
 
     val auth = FirebaseAuth.getInstance();
 
     private var color: Int= R.color.weak
+
+
+    private lateinit var  mAuth: FirebaseAuth
+    private lateinit var  refUsers : DatabaseReference
+    private var firebaseUserID: String = ""
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,27 @@ class ActivityRegisto : AppCompatActivity(){
 
             else
             {
+
+
+
+
                 auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString())
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful){
+
+                firebaseUserID = mAuth.currentUser!!.uid
+                refUsers = FirebaseDatabase.getInstance().reference.child("Users").child(firebaseUserID)
+
+                val userHashMap = HashMap<String, Any>()
+                userHashMap["uid"] = firebaseUserID
+                userHashMap["username"] = username
+                userHashMap["profile"] = "https://firebasestorage.googleapis.com/v0/b/messegerapp-d957e.appspot.com/o/profile-icons-user.jpeg?alt=media&token=428006b0-d8c8-4295-aa67-4a955146b2c5"
+                userHashMap["cover"]   = "https://firebasestorage.googleapis.com/v0/b/messegerapp-d957e.appspot.com/o/profile-imag.jfif?alt=media&token=f7a52a32-8169-4061-b0f5-d3f4552fb5cc"
+                userHashMap["status"] = "offline"
+                userHashMap["search"] = username //.toLowerCase() a resolver
+
+
+                refUsers.updateChildren(userHashMap)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
@@ -78,6 +98,11 @@ class ActivityRegisto : AppCompatActivity(){
                                 Toast.makeText(baseContext, "register failed.", Toast.LENGTH_SHORT).show()
 
                             }
+
+                        }
+
+                            }
+
                         }
 
             }
